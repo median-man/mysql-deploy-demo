@@ -1,15 +1,21 @@
 const mysql = require("mysql");
 const express = require("express");
 
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "mysql_deploy_demo",
-});
+let connection;
+
+if (process.env.JAWSDB_URL) {
+  connection = mysql.createConnection(process.env.JAWSDB_URL);
+} else {
+  connection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "password",
+    database: "mysql_deploy_demo",
+  });
+}
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   connection.query("SELECT * FROM users", (err, resultSet) => {
